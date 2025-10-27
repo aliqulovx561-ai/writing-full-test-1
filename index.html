@@ -17,18 +17,35 @@
       padding: 15px 30px;
       border-bottom: 1px solid #ccc;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       position: relative;
     }
     .header img {
-      position: absolute;
-      right: 30px;
+      height: 30px;
     }
-    .center-timer {
+    .top-right-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+    .timer-display {
       font-weight: bold;
       font-size: 18px;
-      color: red;
+      color: #d32f2f;
+      background-color: #f8f9fa;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid #d32f2f;
+    }
+    .violation-counter {
+      background-color: #fff3cd;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #856404;
+      border: 1px solid #ffeaa7;
     }
     .part-bar {
       background-color: #f2f4ec;
@@ -327,17 +344,9 @@
       font-weight: bold;
     }
     
-    /* Violation counter */
-    .violation-counter {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #fff3cd;
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-size: 12px;
-      color: #856404;
-      border: 1px solid #ffeaa7;
+    /* Student name display */
+    .student-name-display {
+      font-weight: bold;
     }
   </style>
 </head>
@@ -409,10 +418,12 @@
     </div>
     
     <div class="header">
-      <div class="violation-counter" id="violationCounter" style="display: none;">Violations: 0/2</div>
-      <div class="center-timer" id="timer">60:00</div>
-      <div class="student-name-display" id="studentNameDisplay" style="position: absolute; left: 30px; font-weight: bold;"></div>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/IELTS_logo.svg/2560px-IELTS_logo.svg.png" alt="IELTS" height="30">
+      <div class="student-name-display" id="studentNameDisplay"></div>
+      <div class="top-right-info">
+        <div class="timer-display" id="timer">60:00</div>
+        <div class="violation-counter" id="violationCounter" style="display: none;">Violations: 0/2</div>
+      </div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/IELTS_logo.svg/2560px-IELTS_logo.svg.png" alt="IELTS">
     </div>
 
     <div id="partBar" class="part-bar">
@@ -716,12 +727,15 @@
         
         if (totalSeconds <= 300) {
           timerDisplay.style.color = "#d32f2f";
+          timerDisplay.style.fontSize = "20px";
         }
         
         if (totalSeconds === 0) {
           clearInterval(timer);
-          alert("Time is up! Your work will be saved.");
-          submitTest();
+          if (!isSubmitted) {
+            alert("Time is up! Your work will be saved automatically.");
+            submitTest();
+          }
           isTestActive = false;
         }
         totalSeconds--;
